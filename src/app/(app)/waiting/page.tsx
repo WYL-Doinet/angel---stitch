@@ -1,5 +1,6 @@
 'use client'
 import { Heart } from "lucide-react"
+import Link from "next/link"
 
 const Page = () => {
     return <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 flex flex-col justify-center items-center p-6 text-center">
@@ -28,11 +29,11 @@ const Page = () => {
 
             </div>
         </div>
-        <button
+        <Link href="/invite"
             className="mt-4 text-gray-500 underline"
         >
             Go Back
-        </button>
+        </Link>
     </div>
 }
 

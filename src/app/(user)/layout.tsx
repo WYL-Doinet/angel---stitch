@@ -15,24 +15,26 @@ export const dynamic = 'force-dynamic';
 
 const initialProps = async (): Promise<InitialProps> => {
     return {
-        user: {},
+        user: {
+            relationShipId : null,
+        },
         events: [],
         notes: [],
     }
 }
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-    const props = await initialProps()
+    const {user , events, notes} = await initialProps()
 
-    if (props.user.relationShipId === null) {
+    if (user.relationShipId === null) {
         return redirect('/invite')
     }
 
     const value: SWRConfiguration = {
         fallback: {
-            '/user': props.user,
-            '/events': props.events,
-            '/notes': props.notes,
+            '/user': user,
+            '/events':events,
+            '/notes': notes,
         }
     }
     return <SWRProvider value={value}>{children}</SWRProvider>
