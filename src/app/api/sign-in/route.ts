@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
             },
             accessToken: 'token'
         }
+     
         const response = NextResponse.json({ success: true, user: data.user })
         response.cookies.set(config.cookie.sessionCookieName, data.accessToken, config.cookie.options)
         return response;
