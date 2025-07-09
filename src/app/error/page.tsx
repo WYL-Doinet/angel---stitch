@@ -5,11 +5,11 @@ import { useSearchParams } from 'next/navigation'
 import { signOut } from '../(auth)/sign-out/action';
 const Page = () => {
     return <Suspense>
-        <ErrorHandler/>
+        <ErrorHandler />
     </Suspense>
 };
 
-const ErrorHandler = () =>{
+const ErrorHandler = () => {
     const errorConfigs = {
         400: {
             title: "Bad Request",
@@ -78,7 +78,7 @@ const ErrorHandler = () =>{
         }
     };
     const searchParams = useSearchParams()
-    const currentStatus =  parseInt(searchParams.get('status') || "500" ) 
+    const currentStatus = parseInt(searchParams.get('status') || "500")
     const currentError = errorConfigs[currentStatus as keyof typeof errorConfigs];
 
     return (
@@ -90,7 +90,7 @@ const ErrorHandler = () =>{
                         {Object.keys(errorConfigs).map((status) => (
                             <button
                                 key={status}
-                            
+
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 mx-1 ${currentStatus === parseInt(status)
                                     ? 'bg-gradient-to-r from-blue-500 to-pink-500 text-white shadow-md'
                                     : 'text-gray-600 hover:text-gray-800 hover:bg-white/50'
