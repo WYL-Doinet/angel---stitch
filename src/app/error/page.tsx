@@ -149,7 +149,6 @@ const ErrorHandler = () => {
                     </div>
                 </div>
 
-                {/* Footer */}
                 <div className="text-center mt-8 text-gray-500">
                     <p className="text-sm">
                         Need help? Contact our{' '}
