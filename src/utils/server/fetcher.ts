@@ -29,7 +29,6 @@ export const postFetcher = async ({ url, body = {}, method = 'POST' }: { url: st
 export const getFetcher = async ({ url }: { url: string }) => {
     try {
         const cookieStore = await cookies()
-        console.log('Bearer ' + cookieStore.get(config.cookie.sessionCookieName)?.value)
         const response = await fetch(url, {
             headers: {
                 'Accept': 'application/json',

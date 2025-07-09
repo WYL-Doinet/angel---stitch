@@ -1,9 +1,15 @@
 'use client'
-import React, { useState } from 'react';
+import React, { Suspense } from 'react';
 import { AlertCircle, Home, RefreshCw, ArrowLeft, Search, Shield, Clock, Zap } from 'lucide-react';
 import { useSearchParams } from 'next/navigation'
 import { signOut } from '../(auth)/sign-out/action';
-const ErrorPage = () => {
+const Page = () => {
+    return <Suspense>
+        <ErrorHandler/>
+    </Suspense>
+};
+
+const ErrorHandler = () =>{
     const errorConfigs = {
         400: {
             title: "Bad Request",
@@ -155,6 +161,6 @@ const ErrorPage = () => {
             </div>
         </div>
     );
-};
+}
 
-export default ErrorPage;
+export default Page;
