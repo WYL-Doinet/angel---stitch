@@ -15,8 +15,8 @@ export const config = {
     jwt: {
         secret: process.env.JWT_SECRET,
     },
-    api :{
-        baseApiUrl : process.env.BASE_API_URL as string || 'http://localhost/4000',
-        baseGraphQlUrl : process.env.BASE_GRAPH_QL_URL as string || 'http://localhost/4000/graphql'
+    api: {
+        baseApiUrl: process.env.APP_ENV === 'production' ? process.env.BASE_API_URL : 'http://localhost:4000/api',
+        baseGraphQlUrl: process.env.BASE_GRAPH_QL_URL as string || 'http://localhost:4000/graphql'
     }
 } as const

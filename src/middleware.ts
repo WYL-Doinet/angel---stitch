@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import  {config as appConifg} from '@/config/configuration'
+import { config as appConifg } from '@/config/configuration'
 
 const authRoutes = [
     "/sign-in",
@@ -9,7 +9,13 @@ const authRoutes = [
 
 export default async function middleware(req: NextRequest, res: NextResponse) {
     const path = req.nextUrl.pathname;
+
+    if (path === '/error') {
+        return NextResponse.next();
+    }
+
     const cookieStore = await cookies()
+
     const authenticated = cookieStore.has(appConifg.cookie.sessionCookieName);
 
     if (!authenticated && !authRoutes.includes(path)) {
@@ -24,6 +30,6 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
 }
 export const config = {
     matcher: [
-         "/((?!api|_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+        "/((?!api|_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     ],
 };

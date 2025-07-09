@@ -10,15 +10,12 @@ export const postFetcher = async ({ url, body = {}, method = 'POST' }: { url: st
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + cookieStore.get(config.cookie.sessionCookieName)
+                'Authorization': 'Bearer ' + cookieStore.get(config.cookie.sessionCookieName)?.value
             },
             credentials: 'include',
             body: JSON.stringify(body)
         })
 
-        if (response.status === 401) {
-            cookieStore.delete(config.cookie.sessionCookieName)
-        }
         if (!response.ok) {
             throw response
         }
@@ -29,24 +26,23 @@ export const postFetcher = async ({ url, body = {}, method = 'POST' }: { url: st
     }
 }
 
-export const getFetcher = async ({ url, body = {} }: { url: string, body?: any }) => {
+export const getFetcher = async ({ url }: { url: string }) => {
     try {
         const cookieStore = await cookies()
+        console.log('Bearer ' + cookieStore.get(config.cookie.sessionCookieName)?.value)
         const response = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + cookieStore.get(config.cookie.sessionCookieName)
+                'Authorization': 'Bearer ' + cookieStore.get(config.cookie.sessionCookieName)?.value
             },
             credentials: 'include',
-            body: JSON.stringify(body)
         })
-        if (response.status === 401) {
-            cookieStore.delete(config.cookie.sessionCookieName)
-        }
+
         if (!response.ok) {
             throw response
         }
+       
         return await response.json()
     } catch (error: unknown) {
         throw error

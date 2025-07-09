@@ -4,25 +4,17 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
-    const pathName = request.nextUrl.pathname
     try {
-        // const data = await postFetcher({ url: config.api.baseApiUrl + pathName, body })
-        const data = {
-            user: {
-                relationShipId: null,
-                inviteStatus: false,
-                loveCode: 'love123'
-            },
-            accessToken: 'token'
-        }
-     
-        const response = NextResponse.json({ success: true, user: data.user })
+        const url = config.api.baseApiUrl + '/auth/sign-in';
+        const data = await postFetcher({ url, body })
+        const response = NextResponse.json(data)
         response.cookies.set(config.cookie.sessionCookieName, data.accessToken, config.cookie.options)
         return response;
     } catch (error) {
         if (error instanceof Response) {
             const data = await error.json()
-            return NextResponse.json({ success: false, data }, { status: error.status })
+            return NextResponse.json(data, { status: error.status })
         }
+        return NextResponse.json(undefined, { status: 500 })
     }
 }

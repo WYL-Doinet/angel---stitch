@@ -1,5 +1,7 @@
+import { config } from "@/config/configuration"
 import SWRProvider from "@/provider/swr-provider"
 import { User } from "@/types"
+import { getFetcher } from "@/utils/server/fetcher"
 import { redirect } from "next/navigation"
 import { SWRConfiguration } from "swr"
 
@@ -10,29 +12,34 @@ type InitialProps = {
 }
 
 const initialProps = async (): Promise<InitialProps> => {
+    const url = config.api.baseApiUrl + '/users'
+    const data = await getFetcher({ url })
     return {
-        user: {
-            relationShipId: null,
-            loveCode: 'LOVE1234',
-            inviteStatus: false,
-        }
+        user: data.user
     }
 }
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-    const { user } = await initialProps();
-   
-    if(user.relationShipId !== null) {
-        return redirect('/home')
-    }
+    try {
+        const { user } = await initialProps();
 
-    const value: SWRConfiguration = {
-        fallback: {
-            '/user': user
+        if (user.relationshipId !== null) {
+            return redirect('/home')
         }
-    }
 
-    return <SWRProvider value={value} >{children}</SWRProvider>
+        const value: SWRConfiguration = {
+            fallback: {
+                '/user': user
+            }
+        }
+
+        return <SWRProvider value={value} >{children}</SWRProvider>
+    } catch (error: unknown) {
+        if (error instanceof Response) {
+            return redirect(`/error?status=${error.status}`)
+        }
+        return redirect(`/error?status=${500}`)
+    }
 }
 
 export default Layout

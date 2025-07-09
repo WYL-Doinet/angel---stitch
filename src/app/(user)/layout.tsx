@@ -1,43 +1,39 @@
 import { config } from "@/config/configuration";
 import SWRProvider from "@/provider/swr-provider"
 import { getFetcher } from "@/utils/server/fetcher";
-
 import { redirect } from "next/navigation";
 import { SWRConfiguration } from "swr";
 
-type InitialProps = {
-    user: any,
-    events: any,
-    notes: any,
-}
 
-export const dynamic = 'force-dynamic';
-
-const initialProps = async (): Promise<InitialProps> => {
+const initialProps = async (): Promise<any> => {
+    const url = config.api.baseApiUrl + '/users/me'
+    const data = await getFetcher({ url })
     return {
-        user: {
-            relationShipId : null,
-        },
-        events: [],
-        notes: [],
+        user: data.user
     }
 }
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-    const {user , events, notes} = await initialProps()
+    try {
+        const { user } = await initialProps()
 
-    if (user.relationShipId === null) {
-        return redirect('/invite')
-    }
-
-    const value: SWRConfiguration = {
-        fallback: {
-            '/user': user,
-            '/events':events,
-            '/notes': notes,
+        if (user.relationshipId === null) {
+            return redirect('/invite')
         }
+
+        const value: SWRConfiguration = {
+            fallback: {
+                '/api/users/me': user,
+            }
+        }
+
+        return <SWRProvider value={value}>{children}</SWRProvider>
+    } catch (error: unknown) {
+        if (error instanceof Response) {
+            return redirect(`/error?status=${error.status}`)
+        }
+        return redirect(`/error?status=${500}`)
     }
-    return <SWRProvider value={value}>{children}</SWRProvider>
 }
 
 export default Layout

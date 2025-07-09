@@ -1,5 +1,5 @@
 export type User = {
-    relationShipId : null | number,
-    loveCode: string,
+    relationshipId : null | number,
+    invitationCode: string,
     inviteStatus: boolean,
 }
